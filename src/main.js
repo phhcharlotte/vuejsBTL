@@ -16,16 +16,27 @@ Vue.directive("click", {
       el.style.width = "100%";
       el.style.height = "100%";
     };
-    const wrapper = document.querySelector(".img");
+    let setImageDefault = () => {
+      el.style.width = "200px";
+      el.style.height = "100px";
+    };
 
     el.addEventListener("click", () => {
+      const wrapper = document.querySelector(".img");
       const previewImg = document.querySelector("div.preview-img");
       if (!previewImg) {
         const imgWrapper = document.createElement("div");
-        imgWrapper.classList.add("preview-img-wrapper");
+        imgWrapper.classList.add("preview-img");
         setImageWrapperStyle(imgWrapper);
         console.log(wrapper);
-        // wrapper.appendChild(imgWrapper);
+        wrapper.appendChild(imgWrapper);
+        const valueImg = document.querySelector("img");
+        imgWrapper.appendChild(valueImg);
+        wrapper.appendChild(valueImg);
+        el.addEventListener("click", () => {
+          wrapper.removeChild(document.querySelector("div.preview-img"));
+          setImageDefault(wrapper);
+        });
       }
     });
   },
