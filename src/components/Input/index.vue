@@ -1,9 +1,21 @@
 <template>
-  <input type="text" />
+  <input type="text" v-bind:value="value" v-on:input="handleInput" />
 </template>
 <script>
 export default {
   name: "InputValue",
+  props: {
+    value: String,
+  },
+  data() {
+    return {};
+  },
+  methods: {
+    handleInput() {
+      const value = event.target.value;
+      this.$emit("input", value);
+    },
+  },
 };
 </script>
 
