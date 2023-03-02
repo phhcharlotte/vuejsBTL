@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <header-login></header-login>
+    <header-login />
     <div class="login-container">
       <form>
         <div class="title">
@@ -24,6 +24,7 @@
                 v-model="user.username"
                 @blur="onblur"
               />
+              <input-value />
             </div>
             <div v-if="isErrorUser" class="error error-user">
               ユーザー名は必須です
@@ -65,6 +66,12 @@
             />
             <span>ログイン</span>
           </button>
+          <btn-button
+            class="btn-login"
+            v-on:handleClickEvent="login"
+            v-tooltip="'Login'"
+            v-bind:title="title"
+          />
         </div>
       </form>
       <div class="modal-above" @click="closeModal" v-if="visible">
@@ -73,60 +80,64 @@
           <h3>Login Unsuccessful</h3>
           <p @click="closeModal">{{ errorMsg }}</p>
           <div>
-            <button @click="closeModal">Close</button>
+            <button @click="closeModal">
+              <span>Close</span>
+            </button>
           </div>
         </div>
       </div>
     </div>
-    <footer-login></footer-login>
+    <footer-login />
   </div>
 </template>
 
 <script>
 import HeaderLogin from "@/components/Header/index.vue";
 import FooterLogin from "@/components/Footer/index.vue";
-// import axios from "axios";
+import BtnButton from "@/components/button/index.vue";
+import InputValue from "@/components/Input/index.vue";
+import axios from "axios";
 import { ErrorMixin } from "@/utils/mixinError.js";
 export default {
   name: "LoginContent",
-  components: { HeaderLogin, FooterLogin },
+  components: {
+    HeaderLogin,
+    FooterLogin,
+    BtnButton,
+    InputValue,
+  },
   mixins: [ErrorMixin],
   data() {
     return {
+      title: "ログイン",
       user: {
         username: "",
         password: "",
       },
-      // visible: false,
-      // loading: false,
       isErrorUser: false,
       isErrorPass: false,
-      // errorMsg: "",
     };
   },
   methods: {
-    // closeModal() {
-    //   this.visible = false;
-    // },
-    // login() {
-    //   this.loading = true;
-    //   axios
-    //     .post("https://staging.cippo.info/api/default/api/login", {
-    //       username: this.user.username,
-    //       password: this.user.password,
-    //     })
-    //     .then(() => {
-    //       this.$router.push("/");
-    //     })
-    //     .catch((error) => {
-    //       let value = error.response;
-    //       if (value.status === 400) {
-    //         this.visible = true;
-    //         this.errorMsg = value.data.message_en;
-    //       }
-    //       this.loading = false;
-    //     });
-    // },
+    login() {
+      this.loading = true;
+      axios
+        .post("https://staging.cippo.info/api/default/api/login", {
+          username: this.user.username,
+          password: this.user.password,
+        })
+        .then(() => {
+          this.$router.push("/");
+        })
+        .catch((error) => {
+          let value = error.response;
+          if (value.status === 400) {
+            this.visible = true;
+            this.errorMsg = value.data.message_en;
+          }
+          this.loading = false;
+        });
+    },
     onblur(e) {
       let valueInput = e.target.value;
       let nameValue = e.target.name;
@@ -179,7 +190,6 @@ export default {
 }
 .close-err {
   text-align: right;
-
   cursor: pointer;
 }
 .modal-err {
@@ -243,7 +253,7 @@ export default {
   font-size: 14px;
 }
 .inputValue input {
-  height: 40px;
+  height: 100%;
   width: 100%;
   line-height: 40px;
   padding-left: 10px;
