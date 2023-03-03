@@ -1,6 +1,10 @@
 <template>
-  <button class="btn" v-on:click.prevent="handleClick">
-    <!-- <img class="loading" :src="'https://i.gifer.com/ZZ5H.gif'" v-if="loading" /> -->
+  <button class="btn" @click.prevent="handleClick">
+    <img
+      class="loading"
+      :src="'https://i.gifer.com/ZZ5H.gif'"
+      v-if="isLoading"
+    />
     <span>{{ title }}</span>
   </button>
 </template>
@@ -9,6 +13,7 @@ export default {
   name: "BtnButton",
   props: {
     title: String,
+    isLoading: Boolean,
   },
   data() {
     return {};
@@ -16,7 +21,6 @@ export default {
   methods: {
     handleClick() {
       this.$emit("handleClickEvent");
-      console.log("123", this.title);
     },
   },
 };
@@ -36,5 +40,9 @@ export default {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+.loading {
+  width: 20px;
+  height: 20px;
 }
 </style>

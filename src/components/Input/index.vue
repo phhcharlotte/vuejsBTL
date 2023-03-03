@@ -1,5 +1,5 @@
 <template>
-  <input type="text" v-bind:value="value" v-on:input="handleInput" />
+  <input type="email" @blur="$emit('handleCheck', $event.target.value)" />
 </template>
 <script>
 export default {
@@ -9,12 +9,6 @@ export default {
   },
   data() {
     return {};
-  },
-  methods: {
-    handleInput() {
-      const value = event.target.value;
-      this.$emit("input", value);
-    },
   },
 };
 </script>

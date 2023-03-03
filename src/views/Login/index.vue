@@ -16,15 +16,20 @@
               <span class="icon"><i class="fa-solid fa-star-of-life"></i></span>
             </div>
             <div class="inputValue">
-              <input
+              <!-- <input
                 type="text"
                 placeholder="ユーザ名を入力してください。"
                 v-bind:class="{ username: true, active: isErrorUser }"
                 name="username"
                 v-model="user.username"
                 @blur="onblur"
+              /> -->
+              <input-value
+                v-model="user.username"
+                placeholder="ユーザ名を入力してください。"
+                name="username"
+                @handleCheck="handleCheck"
               />
-              <input-value />
             </div>
             <div v-if="isErrorUser" class="error error-user">
               ユーザー名は必須です
@@ -58,34 +63,20 @@
               <span>パスワードをお忘れの場合</span>
             </div>
           </div>
-          <button class="btn-login" @click.prevent="login" v-tooltip="'Login'">
-            <img
-              class="loading"
-              :src="'https://i.gifer.com/ZZ5H.gif'"
-              v-if="loading"
-            />
-            <span>ログイン</span>
-          </button>
           <btn-button
+            title="ログイン"
             class="btn-login"
             v-on:handleClickEvent="login"
+            :isLoading="loading"
             v-tooltip="'Login'"
-            v-bind:title="title"
           />
         </div>
       </form>
-      <div class="modal-above" @click="closeModal" v-if="visible">
-        <div class="modal-err">
-          <p class="close-err">X</p>
-          <h3>Login Unsuccessful</h3>
-          <p @click="closeModal">{{ errorMsg }}</p>
-          <div>
-            <button @click="closeModal">
-              <span>Close</span>
-            </button>
-          </div>
-        </div>
-      </div>
+      <err-modal
+        v-on:handleModal="closeModal"
+        v-if="visible"
+        :value="errorMsg"
+      ></err-modal>
     </div>
     <footer-login />
   </div>
@@ -96,7 +87,7 @@ import HeaderLogin from "@/components/Header/index.vue";
 import FooterLogin from "@/components/Footer/index.vue";
 import BtnButton from "@/components/button/index.vue";
 import InputValue from "@/components/Input/index.vue";
-import axios from "axios";
+import ErrModal from "@/components/Modal/index.vue";
 import { ErrorMixin } from "@/utils/mixinError.js";
 export default {
   name: "LoginContent",
@@ -105,39 +96,21 @@ export default {
     FooterLogin,
     BtnButton,
     InputValue,
+    ErrModal,
   },
   mixins: [ErrorMixin],
   data() {
     return {
-      title: "ログイン",
       user: {
         username: "",
         password: "",
       },
       isErrorUser: false,
       isErrorPass: false,
+      errorMsg: "",
     };
   },
   methods: {
-    login() {
-      this.loading = true;
-      axios
-        .post("https://staging.cippo.info/api/default/api/login", {
-          username: this.user.username,
-          password: this.user.password,
-        })
-        .then(() => {
-          this.$router.push("/");
-        })
-        .catch((error) => {
-          let value = error.response;
-          if (value.status === 400) {
-            this.visible = true;
-            this.errorMsg = value.data.message_en;
-          }
-          this.loading = false;
-        });
-    },
     onblur(e) {
       let valueInput = e.target.value;
       let nameValue = e.target.name;
@@ -175,39 +148,26 @@ export default {
         }
       }
     },
+    handleCheck(valueInput) {
+      const regexMail =
+        /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i;
+      if (valueInput === "") {
+        {
+          this.isErrorUser = true;
+        }
+      } else {
+        if (regexMail.test(valueInput) === true) {
+          this.isErrorUser = false;
+        } else if (regexMail.test(valueInput) === false) {
+          this.isErrorUser = true;
+        }
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
-.modal-above {
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-}
-.close-err {
-  text-align: right;
-  cursor: pointer;
-}
-.modal-err {
-  position: fixed;
-  background-color: #fff;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 300px;
-  z-index: 1000;
-  border-radius: 5px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  padding: 20px;
-}
-.loading {
-  width: 20px;
-  height: 20px;
-}
 .content {
   height: 100%;
   width: 100%;
@@ -283,21 +243,6 @@ export default {
   font-size: 14px;
   padding: 7px 0;
   display: inline-block;
-  cursor: pointer;
-}
-.btn-login {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 15px;
-  column-gap: 10px;
-  width: 27%;
-  height: 2.5em;
-  margin-bottom: 20px;
-  background: #59bab1;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
   cursor: pointer;
 }
 </style>
