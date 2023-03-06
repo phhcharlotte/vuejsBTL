@@ -1,5 +1,5 @@
 <template>
-  <input type="email" @blur="$emit('handleCheck', $event.target.value)" />
+  <input type="text" @blur="$emit('handleCheck', $event.target.value)" />
 </template>
 <script>
 export default {

@@ -16,19 +16,12 @@
               <span class="icon"><i class="fa-solid fa-star-of-life"></i></span>
             </div>
             <div class="inputValue">
-              <!-- <input
-                type="text"
-                placeholder="ユーザ名を入力してください。"
-                v-bind:class="{ username: true, active: isErrorUser }"
-                name="username"
-                v-model="user.username"
-                @blur="onblur"
-              /> -->
               <input-value
                 v-model="user.username"
                 placeholder="ユーザ名を入力してください。"
                 name="username"
                 @handleCheck="handleCheck"
+                v-bind:class="{ active: isErrorUser }"
               />
             </div>
             <div v-if="isErrorUser" class="error error-user">
@@ -125,8 +118,6 @@ export default {
         if (nameValue == "username") {
           this.isErrorUser = true;
         }
-
-        console.log(nameValue);
       } else {
         if (regexPass.test(valueInput) === true && nameValue == "password") {
           this.isErrorPass = false;
