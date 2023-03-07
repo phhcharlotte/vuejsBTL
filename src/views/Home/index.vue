@@ -17,7 +17,7 @@ export default {
 </script>
 <style scoped>
 .img {
-  border: 1px solid black;
+  position: fixed;
   width: fit-content;
 }
 .img img {

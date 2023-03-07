@@ -13,13 +13,11 @@ const router = new VueRouter({ routes, mode: "history" });
 Vue.directive("click", {
   bind(el) {
     let setImageWrapperStyle = (e) => {
+      e.style.position = "relative";
       e.style.width = "100%";
       e.style.height = "100%";
     };
-    let setImageDefault = (e) => {
-      e.style.width = "200px";
-      e.style.height = "100px";
-    };
+
     el.addEventListener("click", () => {
       const wrapper = document.querySelector(".img");
       const previewImg = document.querySelector("div.preview-img");
@@ -35,9 +33,12 @@ Vue.directive("click", {
 
         imgWrapper.appendChild(clone);
         wrapper.appendChild(imgWrapper);
+
+        imgWrapper.addEventListener("click", () => {
+          wrapper.removeChild(document.querySelector("div.preview-img"));
+        });
       } else {
         wrapper.removeChild(document.querySelector("div.preview-img"));
-        setImageDefault(wrapper);
       }
     });
   },
