@@ -12,31 +12,32 @@ const router = new VueRouter({ routes, mode: "history" });
 
 Vue.directive("click", {
   bind(el) {
-    let setImageWrapperStyle = () => {
-      el.style.width = "100%";
-      el.style.height = "100%";
+    let setImageWrapperStyle = (e) => {
+      e.style.width = "100%";
+      e.style.height = "100%";
     };
-    let setImageDefault = () => {
-      el.style.width = "200px";
-      el.style.height = "100px";
+    let setImageDefault = (e) => {
+      e.style.width = "200px";
+      e.style.height = "100px";
     };
-
     el.addEventListener("click", () => {
       const wrapper = document.querySelector(".img");
       const previewImg = document.querySelector("div.preview-img");
       if (!previewImg) {
+        // Create Wrapper
         const imgWrapper = document.createElement("div");
         imgWrapper.classList.add("preview-img");
         setImageWrapperStyle(imgWrapper);
-        console.log(wrapper);
+
+        // Clone the image node
+        const clone = el.cloneNode(true);
+        setImageWrapperStyle(clone);
+
+        imgWrapper.appendChild(clone);
         wrapper.appendChild(imgWrapper);
-        const valueImg = document.querySelector("img");
-        imgWrapper.appendChild(valueImg);
-        wrapper.appendChild(valueImg);
-        el.addEventListener("click", () => {
-          wrapper.removeChild(document.querySelector("div.preview-img"));
-          setImageDefault(wrapper);
-        });
+      } else {
+        wrapper.removeChild(document.querySelector("div.preview-img"));
+        setImageDefault(wrapper);
       }
     });
   },

@@ -1,14 +1,21 @@
 <template>
-  <input type="text" @blur="$emit('handleCheck', $event.target.value)" />
+  <input
+    type="text"
+    :value="updateInput"
+    @input="valueInput($event.target.value)"
+    @blur="$emit('handleCheck', $event.target.value)"
+  />
 </template>
 <script>
 export default {
   name: "InputValue",
   props: {
-    value: String,
+    updateInput: String,
   },
-  data() {
-    return {};
+  methods: {
+    valueInput(updateInput) {
+      this.$emit("input", updateInput);
+    },
   },
 };
 </script>

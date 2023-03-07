@@ -15,9 +15,6 @@ export default {
     title: String,
     isLoading: Boolean,
   },
-  data() {
-    return {};
-  },
   methods: {
     handleClick() {
       this.$emit("handleClickEvent");
@@ -29,7 +26,7 @@ export default {
 .btn {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   padding-right: 15px;
   column-gap: 10px;
   width: 27%;

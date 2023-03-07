@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="content">
     <h1>Home</h1>
 
     <div class="img">
@@ -20,7 +20,7 @@ export default {
   border: 1px solid black;
   width: fit-content;
 }
-img {
+.img img {
   width: 200px;
   height: 100px;
 }

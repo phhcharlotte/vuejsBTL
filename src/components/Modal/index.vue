@@ -1,11 +1,11 @@
 <template>
-  <div class="modal-above" v-on:click="closeModal">
+  <div class="modal-above" @click="closeModal">
     <div class="modal-err">
       <p class="close-err">X</p>
       <h3>Login Unsuccessful</h3>
-      <p v-on:click="closeModal">{{ value }}</p>
+      <p @click="closeModal">{{ value }}</p>
       <div>
-        <button v-on:click="closeModal">
+        <button @click="closeModal">
           <span>Close</span>
         </button>
       </div>

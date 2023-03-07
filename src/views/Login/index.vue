@@ -17,7 +17,8 @@
             </div>
             <div class="inputValue">
               <input-value
-                v-model="user.username"
+                v-model="username"
+                :updateInput="username"
                 placeholder="ユーザ名を入力してください。"
                 name="username"
                 @handleCheck="handleCheck"
@@ -40,7 +41,7 @@
                 placeholder="パスワードを入力してください。"
                 v-bind:class="{ password: true, active: isErrorPass }"
                 name="password"
-                v-model="user.password"
+                v-model="password"
                 @blur="onblur"
               />
             </div>
@@ -58,15 +59,14 @@
           </div>
           <btn-button
             title="ログイン"
-            class="btn-login"
-            v-on:handleClickEvent="login"
+            @handleClickEvent="login"
             :isLoading="loading"
             v-tooltip="'Login'"
           />
         </div>
       </form>
       <err-modal
-        v-on:handleModal="closeModal"
+        @handleModal="closeModal"
         v-if="visible"
         :value="errorMsg"
       ></err-modal>
@@ -94,10 +94,8 @@ export default {
   mixins: [ErrorMixin],
   data() {
     return {
-      user: {
-        username: "",
-        password: "",
-      },
+      username: "",
+      password: "",
       isErrorUser: false,
       isErrorPass: false,
       errorMsg: "",
