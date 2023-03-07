@@ -43,6 +43,7 @@ Vue.directive("click", {
     });
   },
 });
+
 new Vue({
   router,
   render: (h) => h(App),
